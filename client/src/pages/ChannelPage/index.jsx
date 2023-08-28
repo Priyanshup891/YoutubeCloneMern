@@ -15,7 +15,7 @@ import Loader from "../../Components/Loader";
 const ChannelPage = () => {
   const { id } = useParams();
   const { user } = useSelector((state) => state.auth);
-  const { userDetail, isLoading, isError, message } = useSelector(
+  const { userDetail, userVideos, isLoading, isError, message } = useSelector(
     (state) => state.user
   );
 
@@ -35,7 +35,6 @@ const ChannelPage = () => {
   if (isLoading) {
     return <Loader />;
   }
-
 
   return (
     <>
@@ -69,7 +68,7 @@ const ChannelPage = () => {
                 <p>
                   {userDetail && userDetail?.subscribers?.length} subscriber
                 </p>
-                <p>1 video</p>
+                <p>{userVideos?.length} video</p>
               </div>
             </UserProfileInfo>
           </div>
@@ -97,7 +96,7 @@ const ChannelPage = () => {
             )}
           </UserActions>
         </ChannelUserDetail>
-        <Tabs/>
+        <Tabs />
       </ChannelContainer>
       <ToastContainer />
     </>

@@ -8,6 +8,7 @@ const {
   dislikeVideo,
   editVideo,
   deleteVideo,
+  getSomeVideos,
 } = require("../controllers/video.controller");
 const { getAccessToRoute } = require("../middleware/auth/auth");
 const uploadFile = require("../middleware/multer/multerVideoConfig.js");
@@ -36,6 +37,7 @@ router.put(
 );
 router.delete("/delete/:id", getAccessToRoute, deleteVideo);
 router.get("/random", getRandomVideo);
+router.get("/some", getSomeVideos);
 router.get("/:id", getVideoById);
 router.put("/view/:id", increaseView);
 router.put("/like/:id", getAccessToRoute, likeVideo);

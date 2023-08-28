@@ -78,6 +78,15 @@ const getRandomVideo = asyncHandler(async (req, res) => {
   }
 });
 
+const getSomeVideos = asyncHandler(async (req, res) => {
+  try {
+    const videos = await Video.find().limit(10).populate("userId");
+    res.status(200).json(videos);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 const getVideoById = asyncHandler(async (req, res) => {
   try {
     const video = await Video.findById(req.params.id).populate("userId");
@@ -126,6 +135,7 @@ module.exports = {
   editVideo,
   deleteVideo,
   getRandomVideo,
+  getSomeVideos,
   getVideoById,
   increaseView,
   likeVideo,

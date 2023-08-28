@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { styled } from "styled-components";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getVideoById, reset } from "../../redux/video/videoSlice";
+import {
+  getSomeVideo,
+  getVideoById,
+  reset,
+} from "../../redux/video/videoSlice";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { BiLike, BiDislike, BiSolidLike, BiSolidDislike } from "react-icons/bi";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
@@ -15,7 +19,7 @@ import Loader from "../../Components/Loader";
 
 const CurrentVideoPage = () => {
   const { id } = useParams();
-  const { currentVideo, isLoading, isError, message } = useSelector(
+  const { currentVideo, someVideos, isLoading, isError, message } = useSelector(
     (state) => state.video
   );
 
@@ -30,6 +34,7 @@ const CurrentVideoPage = () => {
     }
 
     dispatch(getVideoById(id));
+    dispatch(getSomeVideo());
 
     return () => dispatch(reset());
   }, [dispatch, id, isError, message]);
@@ -261,7 +266,31 @@ const CurrentVideoPage = () => {
               <p>{currentVideo?.desc}</p>
             </AboutVideo>
           </MainVideo>
-          <SimilarVideo></SimilarVideo>
+          <SimilarVideo>
+            {someVideos &&
+              someVideos?.map((videos, index) => (
+                <div key={index}>
+                  <Link
+                    to={`/video/${videos?._id}`}
+                    style={{
+                      textDecoration: "none",
+                    }}
+                  >
+                    <SimilarVideoThumbnail>
+                      <img src={videos?.thumbnail_url} alt="thumbnail_image" />
+                    </SimilarVideoThumbnail>
+                  </Link>
+                  <SimilarVideoInfo>
+                    <h3>{videos?.title}</h3>
+                    <span>{videos?.userId?.name}</span>
+                    <p>{`${videos?.views} views ${format(
+                      videos?.createdAt,
+                      "en_US"
+                    )}`}</p>
+                  </SimilarVideoInfo>
+                </div>
+              ))}
+          </SimilarVideo>
         </CurrentVidContainer>
       )}
       <ToastContainer />
@@ -278,7 +307,21 @@ const CurrentVidContainer = styled.div`
 
 const MainVideo = styled.div``;
 
-const SimilarVideo = styled.div``;
+const SimilarVideo = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  padding-left: 20px;
+
+  & > div {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+`;
 
 const VideoPlayer = styled.iframe`
   width: 100%;
@@ -426,6 +469,40 @@ const AboutVideo = styled.div`
     font-size: 16px;
     font-weight: 400;
     color: #f1f1f1;
+  }
+`;
+
+const SimilarVideoThumbnail = styled.div`
+  width: 100%;
+  height: 100px;
+  display: flex;
+  flex: 1;
+  border-radius: 10px;
+  overflow: hidden;
+`;
+
+const SimilarVideoInfo = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+
+  h3 {
+    font-size: 16px;
+    color: #f1f1f1;
+    font-weight: 600;
+  }
+
+  span {
+    font-size: 14px;
+    color: #aaaaaa;
+    font-weight: 500;
+  }
+
+  p {
+    font-size: 14px;
+    color: #aaaaaa;
+    font-weight: 400;
   }
 `;
 

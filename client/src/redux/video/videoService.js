@@ -11,6 +11,15 @@ const getRandomVideo = async () => {
   }
 };
 
+const getSomeVideo = async () => {
+  try {
+    const response = await axios.get(`${HTTP_URL}/some`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getVideoById = async (id) => {
   try {
     const response = await axios.get(`${HTTP_URL}/${id}`);
@@ -20,5 +29,5 @@ const getVideoById = async (id) => {
   }
 };
 
-const videoService = { getRandomVideo, getVideoById };
+const videoService = { getRandomVideo, getSomeVideo, getVideoById };
 export default videoService;

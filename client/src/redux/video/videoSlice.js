@@ -4,7 +4,7 @@ import videoService from "./videoService";
 const initialState = {
   randomVideos: [],
   currentVideo: {},
-  smallVideos: [],
+  someVideos: [],
   isLoading: false,
   isError: false,
   message: "",
@@ -15,6 +15,21 @@ export const getRandomVideo = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       return await videoService.getRandomVideo();
+    } catch (error) {
+      const message =
+        (error.message && error.message.data && error.message.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getSomeVideo = createAsyncThunk(
+  "video/some",
+  async (_, thunkAPI) => {
+    try {
+      return await videoService.getSomeVideo();
     } catch (error) {
       const message =
         (error.message && error.message.data && error.message.data.message) ||
@@ -50,7 +65,7 @@ const videoSlice = createSlice({
       state.message = "";
       state.randomVideos = [];
       state.currentVideo = {};
-      state.smallVideos = [];
+      state.someVideos = [];
     },
   },
   extraReducers: (builder) => {
@@ -67,6 +82,19 @@ const videoSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         state.randomVideos = [];
+      })
+      .addCase(getSomeVideo.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getSomeVideo.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.someVideos = action.payload;
+      })
+      .addCase(getSomeVideo.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.someVideos = [];
       })
       .addCase(getVideoById.pending, (state) => {
         state.isLoading = true;
