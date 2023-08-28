@@ -4,13 +4,14 @@ import { styled } from "styled-components";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getVideoById, reset } from "../../redux/video/videoSlice";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { BiLike, BiDislike, BiSolidLike, BiSolidDislike } from "react-icons/bi";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 import axios from "axios";
 import { format } from "timeago.js";
+import Loader from "../../Components/Loader";
 
 const CurrentVideoPage = () => {
   const { id } = useParams();
@@ -21,6 +22,7 @@ const CurrentVideoPage = () => {
   const { user } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isError) {
@@ -33,30 +35,100 @@ const CurrentVideoPage = () => {
   }, [dispatch, id, isError, message]);
 
   const handleSubscribe = async () => {
-    try {
-      const response = await axios.put(
-        `http://localhost:8800/api/user/sub/${currentVideo?.userId?._id}`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${user?.access_token}`,
-          },
-        }
-      );
+    if (!user && user === null) {
+      navigate("/sign_in");
+    } else {
+      try {
+        const response = await axios.put(
+          `http://localhost:8800/api/user/sub/${currentVideo?.userId?._id}`,
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${user?.access_token}`,
+            },
+          }
+        );
 
-      if (response.status === 200 && response.statusText) {
-        window.location.reload();
+        if (response.status === 200 && response.statusText) {
+          window.location.reload();
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
   const handleUnsubscribe = async () => {
+    if (!user && user === null) {
+      navigate("/sign_in");
+    } else {
+      try {
+        const response = await axios.put(
+          `http://localhost:8800/api/user/unSub/${currentVideo?.userId?._id}`,
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${user?.access_token}`,
+            },
+          }
+        );
+
+        if (response.status === 200 && response.statusText) {
+          window.location.reload();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const handleLike = async () => {
+    if (!user && user === null) {
+      navigate("/sign_in");
+    } else {
+      try {
+        await axios.put(
+          `http://localhost:8800/api/video/like/${currentVideo?._id}`,
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${user?.access_token}`,
+            },
+          }
+        );
+        window.location.reload();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const handleDislike = async () => {
+    if (!user && user === null) {
+      navigate("/sign_in");
+    } else {
+      try {
+        await axios.put(
+          `http://localhost:8800/api/video/dislike/${currentVideo?._id}`,
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${user?.access_token}`,
+            },
+          }
+        );
+
+        window.location.reload();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const handleDelete = async () => {
     try {
-      const response = await axios.put(
-        `http://localhost:8800/api/user/unSub/${currentVideo?.userId?._id}`,
-        null,
+      const response = await axios.delete(
+        `http://localhost:8800/api/video/delete/${currentVideo?._id}`,
         {
           headers: {
             Authorization: `Bearer ${user?.access_token}`,
@@ -65,43 +137,19 @@ const CurrentVideoPage = () => {
       );
 
       if (response.status === 200 && response.statusText) {
-        window.location.reload();
+        toast.info("Video will be delete shortly.");
+        setTimeout(() => {
+          navigate("/");
+        }, 6500);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleLike = async () => {
-    await axios.put(
-      `http://localhost:8800/api/video/like/${currentVideo?._id}`,
-      null,
-      {
-        headers: {
-          Authorization: `Bearer ${user?.access_token}`,
-        },
-      }
-    );
-    window.location.reload();
-  };
-
-  const handleDislike = async () => {
-    try {
-      await axios.put(
-        `http://localhost:8800/api/video/dislike/${currentVideo?._id}`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${user?.access_token}`,
-          },
-        }
-      );
-
-      window.location.reload();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div
@@ -159,8 +207,15 @@ const CurrentVideoPage = () => {
                         gap: "10px",
                       }}
                     >
-                      <EditBtn>Edit</EditBtn>
-                      <DeleteBtn>Delete</DeleteBtn>
+                      <Link
+                        to={`/video_edit/${currentVideo?._id}`}
+                        style={{
+                          textDecoration: "none",
+                        }}
+                      >
+                        <EditBtn>Edit</EditBtn>
+                      </Link>
+                      <DeleteBtn onClick={handleDelete}>Delete</DeleteBtn>
                     </div>
                   ) : (
                     <div>

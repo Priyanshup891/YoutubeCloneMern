@@ -18,6 +18,57 @@ const uploadVideo = asyncHandler(async (req, res) => {
   }
 });
 
+const editVideo = asyncHandler(async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.id);
+    if (!video) {
+      return res.status(404).json("User not found!");
+    }
+
+    if (req.user.id === video.userId.toString()) {
+      const updatedVideo = await Video.findByIdAndUpdate(
+        req.params.id,
+        {
+          $set: {
+            title: req.body.title,
+            desc: req.body.desc,
+            thumbnail_url: req.savedImage
+              ? `http://localhost:8800/images/${req.savedImage}`
+              : video.thumbnail_url,
+            video_url: req.savedVideo
+              ? `http://localhost:8800/videos/${req.savedVideo}`
+              : video.video_url,
+          },
+        },
+        { new: true }
+      );
+      res.status(200).json(updatedVideo);
+    } else {
+      return res.status(404).json("You can only update your video!");
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+const deleteVideo = asyncHandler(async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.id);
+    if (!video) {
+      return res.status(404).json("User not found!");
+    }
+
+    if (req.user.id === video.userId.toString()) {
+      await Video.findByIdAndDelete(req.params.id);
+      res.status(200).json("Your video is deleted successfully!");
+    } else {
+      return res.status(404).json("You can only delete your video!");
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 const getRandomVideo = asyncHandler(async (req, res) => {
   try {
     const videos = await Video.find().populate("userId");
@@ -72,6 +123,8 @@ const dislikeVideo = asyncHandler(async (req, res) => {
 
 module.exports = {
   uploadVideo,
+  editVideo,
+  deleteVideo,
   getRandomVideo,
   getVideoById,
   increaseView,

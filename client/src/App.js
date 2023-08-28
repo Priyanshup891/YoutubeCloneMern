@@ -7,6 +7,7 @@ import ChannelPage from "./pages/ChannelPage";
 import UploadVideoPage from "./pages/UploadVideoPage";
 import UpdateProfilePage from "./pages/UpdateProfilePage";
 import CurrentVideoPage from "./pages/CurrentVideoPage";
+import VideoEditPage from "./pages/VideoEditPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/upload_video" element={<UploadVideoPage />} />
           <Route path="update_profile/:id" element={<UpdateProfilePage />} />
           <Route path="/video/:id" element={<CurrentVideoPage />} />
+          <Route path="/video_edit/:id" element={<VideoEditPage />} />
         </Route>
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/sign_in" element={<SignInPage />} />

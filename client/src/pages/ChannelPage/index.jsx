@@ -10,6 +10,7 @@ import {
   reset,
 } from "../../redux/user/userSlice";
 import Tabs from "../../Components/Tabs";
+import Loader from "../../Components/Loader";
 
 const ChannelPage = () => {
   const { id } = useParams();
@@ -30,6 +31,11 @@ const ChannelPage = () => {
 
     return () => dispatch(reset());
   }, [dispatch, id, isError, message]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
 
   return (
     <>

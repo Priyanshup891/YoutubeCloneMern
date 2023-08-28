@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getRandomVideo, reset } from "../../redux/video/videoSlice";
+import Loader from "../Loader";
 
 const Videos = () => {
   const { randomVideos, isLoading, isError, message } = useSelector(
@@ -21,6 +22,10 @@ const Videos = () => {
 
     return () => dispatch(reset());
   }, [dispatch, isError, message]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <>

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { reset, signIn } from "../../redux/auth/authSlice";
+import Loader from "../../Components/Loader";
 
 const SignInPage = () => {
   const [formData, setFormData] = useState({
@@ -61,6 +62,11 @@ const SignInPage = () => {
       }
     }
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
 
   return (
     <>
