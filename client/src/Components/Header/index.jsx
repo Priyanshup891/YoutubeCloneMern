@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "styled-components";
 import { BsYoutube, BsThreeDotsVertical } from "react-icons/bs";
 import { BiSearch, BiSolidMicrophone } from "react-icons/bi";
@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { logout } from "../../redux/auth/authSlice";
 
 const Header = () => {
+  const [q, setQ] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -28,19 +29,30 @@ const Header = () => {
   return (
     <>
       <HeaderContainer>
-        <Link to="/" style={{
-          textDecoration:"none",
-          color:"#fff"
-        }}>
-        <LeftSide>
-          <BsYoutube size={35} color="red" />
-          <span>YouTube</span>
-        </LeftSide>
+        <Link
+          to="/"
+          style={{
+            textDecoration: "none",
+            color: "#fff",
+          }}
+        >
+          <LeftSide>
+            <BsYoutube size={35} color="red" />
+            <span>YouTube</span>
+          </LeftSide>
         </Link>
         <Center>
           <SearchBar>
-            <input type="text" placeholder="Search" />
-            <button>
+            <input
+              type="text"
+              placeholder="Search"
+              onChange={(e) => setQ(e.target.value)}
+            />
+            <button
+              onClick={() => {
+                navigate(`/search/${q}`);
+              }}
+            >
               <BiSearch size={24} color="#fff" />
             </button>
           </SearchBar>

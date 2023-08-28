@@ -130,6 +130,20 @@ const dislikeVideo = asyncHandler(async (req, res) => {
   }
 });
 
+const search = asyncHandler(async (req, res) => {
+  try {
+    const { query } = req.params;
+
+    const videos = await Video.find({
+      title: { $regex: query, $options: "i" },
+    }).populate("userId");
+
+    res.status(200).json(videos);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 module.exports = {
   uploadVideo,
   editVideo,
@@ -140,4 +154,5 @@ module.exports = {
   increaseView,
   likeVideo,
   dislikeVideo,
+  search,
 };

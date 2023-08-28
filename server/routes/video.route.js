@@ -9,6 +9,7 @@ const {
   editVideo,
   deleteVideo,
   getSomeVideos,
+  search,
 } = require("../controllers/video.controller");
 const { getAccessToRoute } = require("../middleware/auth/auth");
 const uploadFile = require("../middleware/multer/multerVideoConfig.js");
@@ -42,5 +43,6 @@ router.get("/:id", getVideoById);
 router.put("/view/:id", increaseView);
 router.put("/like/:id", getAccessToRoute, likeVideo);
 router.put("/dislike/:id", getAccessToRoute, dislikeVideo);
+router.get("/search/:query", search);
 
 module.exports = router;
