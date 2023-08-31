@@ -1,6 +1,10 @@
+/* Profile Image Upload  */
+/* Multer for File Upload */
 const multer = require("multer");
 const path = require("path");
 
+/* Storage specifies where to load the file. It contains two properties named "destination" and "filename".
+   This properties have "req, file, callback" parameters. */
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const rootDir = path.dirname(require.main.filename);
@@ -14,6 +18,7 @@ const storage = multer.diskStorage({
   },
 });
 
+/* FileFilter specifies which types of files can be uploaded. */
 const fileFilter = (req, file, cb) => {
   let allowedMimeTypes = ["image/jpg", "image/gif", "image/jpeg", "image/png"];
   if (!allowedMimeTypes.includes(file.mimetype)) {

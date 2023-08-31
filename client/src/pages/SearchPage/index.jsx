@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,7 +9,7 @@ import VideoCard from "../../Components/VideoCard";
 import Loader from "../../Components/Loader";
 
 const SearchPage = () => {
-  const {query} = useParams();
+  const { query } = useParams();
   const { searchedVideos, isError, isLoading, message } = useSelector(
     (state) => state.video
   );

@@ -14,7 +14,7 @@ const SignInPage = () => {
     password: "",
   });
 
-  const { email, password} = formData;
+  const { email, password } = formData;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ const SignInPage = () => {
     e.preventDefault();
     if (!email || !password) {
       toast.error("Please fill all the fields.");
-    }  else {
+    } else {
       try {
         const userData = {
           email,
@@ -67,14 +67,21 @@ const SignInPage = () => {
     return <Loader />;
   }
 
-
   return (
     <>
       <SigContainer>
-        <Logo>
-          <BsYoutube size={35} color="red" />
-          <span>YouTube</span>
-        </Logo>
+        <Link
+          to="/"
+          style={{
+            textDecoration: "none",
+            color:"#f1f1f1"
+          }}
+        >
+          <Logo>
+            <BsYoutube size={35} color="red" />
+            <span>YouTube</span>
+          </Logo>
+        </Link>
         <SigForm onSubmit={handleSubmit}>
           <h3>Sign In</h3>
           <p>Sign In using your email and password.</p>
@@ -131,7 +138,7 @@ const Logo = styled.div`
   span {
     font-size: 1.5rem;
     font-weight: 600;
-    font-family: 'Fjalla One', sans-serif;
+    font-family: "Fjalla One", sans-serif;
   }
 `;
 

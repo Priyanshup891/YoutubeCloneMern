@@ -1,3 +1,4 @@
+/* User Model */
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const { Schema } = mongoose;
@@ -58,10 +59,11 @@ const UserSchema = new Schema(
 );
 
 UserSchema.pre("save", function (next) {
+  /* This method will not work if the user password has not changed. */
   if (!this.isModified("password")) {
     next();
   }
-
+  /* The bcryptjs package is used for encryption operations. */
   bcrypt.genSalt(10, (err, salt) => {
     if (err) next(err);
 

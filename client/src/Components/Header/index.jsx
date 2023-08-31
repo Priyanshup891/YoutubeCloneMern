@@ -5,7 +5,7 @@ import { BiSearch, BiSolidMicrophone } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
+import { Menu, MenuItem } from "@szhsin/react-menu";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 import { toast, ToastContainer } from "react-toastify";

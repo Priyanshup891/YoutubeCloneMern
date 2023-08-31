@@ -1,16 +1,16 @@
+/* Express Router */
 const router = require("express").Router();
-const {
-  register,
-  logout,
-  login,
-  checkAuth,
-} = require("../controllers/auth.controller");
+/* Auth Controller */
+const { register, logout, login } = require("../controllers/auth.controller");
 
-const {getAccessToRoute} = require("../middleware/auth/auth");
-
+/* Register
+   http://localhost:8800/api/auth/register (http post method) */
 router.post("/register", register);
+/* Login
+   http://localhost:8800/api/auth/login (http post method) */
 router.post("/login", login);
-router.get("/check",getAccessToRoute, checkAuth);
+/* Logout
+   http://localhost:8800/api/auth/logout (http get method) */
 router.get("/logout", logout);
 
 module.exports = router;

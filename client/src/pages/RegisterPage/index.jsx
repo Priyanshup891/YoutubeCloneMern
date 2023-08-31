@@ -72,14 +72,21 @@ const RegisterPage = () => {
     return <Loader />;
   }
 
-
   return (
     <>
       <RegContainer>
-        <Logo>
-          <BsYoutube size={35} color="red" />
-          <span>YouTube</span>
-        </Logo>
+        <Link
+          to="/"
+          style={{
+            textDecoration: "none",
+            color: "#f1f1f1",
+          }}
+        >
+          <Logo>
+            <BsYoutube size={35} color="red" />
+            <span>YouTube</span>
+          </Logo>
+        </Link>
         <RegForm onSubmit={handleSubmit}>
           <h3>Register</h3>
           <p>Register using your email and password.</p>
@@ -150,7 +157,7 @@ const Logo = styled.div`
   span {
     font-size: 1.5rem;
     font-weight: 600;
-    font-family: 'Fjalla One', sans-serif;
+    font-family: "Fjalla One", sans-serif;
   }
 `;
 

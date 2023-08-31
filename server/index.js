@@ -8,14 +8,15 @@ const path = require("path");
 const authRoute = require("./routes/auth.route.js");
 const userRoute = require("./routes/user.route.js");
 const videoRoute = require("./routes/video.route.js");
-const { updateUser } = require("./controllers/auth.controller.js");
 
 require("dotenv").config();
 const app = express();
 
+/* Express Static Files */
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 app.use("/videos", express.static(path.join(__dirname, "public/videos")));
 
+/* Middleware */
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -27,12 +28,15 @@ app.use(cookieParser());
 app.use(helmet());
 app.use(morgan("dev"));
 
+/* Routes */
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/video", videoRoute);
 
 const PORT = process.env.PORT || 5500;
 const { MONGO_USERNAME, MONGO_PASSWORD } = process.env;
+
+/* MongoDB Connection */
 mongoose
   .connect(
     `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@ac-6vo8h6r-shard-00-00.6hewl1m.mongodb.net:27017,ac-6vo8h6r-shard-00-01.6hewl1m.mongodb.net:27017,ac-6vo8h6r-shard-00-02.6hewl1m.mongodb.net:27017/?ssl=true&replicaSet=atlas-13w5qh-shard-0&authSource=admin&retryWrites=true&w=majority`,
@@ -42,6 +46,7 @@ mongoose
     }
   )
   .then(() => {
+    /* Express Server */
     app.listen(PORT, () => {
       console.log(`Server is setup on http://localhost:${PORT}`);
     });

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "styled-components";
 import { toast, ToastContainer } from "react-toastify";
@@ -10,9 +10,6 @@ import {
 } from "../../redux/video/videoSlice";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { BiLike, BiDislike, BiSolidLike, BiSolidDislike } from "react-icons/bi";
-import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
-import "@szhsin/react-menu/dist/index.css";
-import "@szhsin/react-menu/dist/transitions/slide.css";
 import axios from "axios";
 import { format } from "timeago.js";
 import Loader from "../../Components/Loader";
@@ -152,6 +149,14 @@ const CurrentVideoPage = () => {
     }
   };
 
+  const handleIncView = async (id) => {
+    try {
+      await axios.put(`http://localhost:8800/api/video/view/${id}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   if (isLoading) {
     return <Loader />;
   }
@@ -190,12 +195,19 @@ const CurrentVideoPage = () => {
                   }}
                 >
                   <UploaderDetail>
-                    <UploaderProfileImage>
-                      <img
-                        src={currentVideo?.userId?.profile_image}
-                        alt="profile_image"
-                      />
-                    </UploaderProfileImage>
+                    <Link
+                      to={`/channel/${currentVideo?.userId?._id}`}
+                      style={{
+                        textDecoration: "none",
+                      }}
+                    >
+                      <UploaderProfileImage>
+                        <img
+                          src={currentVideo?.userId?.profile_image}
+                          alt="profile_image"
+                        />
+                      </UploaderProfileImage>
+                    </Link>
                     <div>
                       <span>{currentVideo?.userId?.name}</span>
                       <p>
@@ -275,6 +287,7 @@ const CurrentVideoPage = () => {
                     style={{
                       textDecoration: "none",
                     }}
+                    onClick={handleIncView(videos?._id)}
                   >
                     <SimilarVideoThumbnail>
                       <img src={videos?.thumbnail_url} alt="thumbnail_image" />
