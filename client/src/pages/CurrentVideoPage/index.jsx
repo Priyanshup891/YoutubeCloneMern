@@ -149,14 +149,6 @@ const CurrentVideoPage = () => {
     }
   };
 
-  const handleIncView = async (id) => {
-    try {
-      await axios.put(`http://localhost:8800/api/video/view/${id}`);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   if (isLoading) {
     return <Loader />;
   }
@@ -287,7 +279,6 @@ const CurrentVideoPage = () => {
                     style={{
                       textDecoration: "none",
                     }}
-                    onClick={handleIncView(videos?._id)}
                   >
                     <SimilarVideoThumbnail>
                       <img src={videos?.thumbnail_url} alt="thumbnail_image" />

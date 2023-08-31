@@ -4,7 +4,6 @@ import { styled } from "styled-components";
 import { BsDot } from "react-icons/bs";
 import { format } from "timeago.js";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 const Tabs = () => {
   const [active, setActive] = useState(0);
@@ -14,14 +13,6 @@ const Tabs = () => {
   useEffect(() => {
     setActive(1);
   }, []);
-
-  const handleIncView = async (id) => {
-    try {
-      await axios.put(`http://localhost:8800/api/video/view/${id}`);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <>
@@ -49,7 +40,6 @@ const Tabs = () => {
                   style={{
                     textDecoration: "none",
                   }}
-                  onClick={handleIncView(videos?._id)}
                 >
                   <VideoThumbnail>
                     <img src={videos?.thumbnail_url} alt="thumbnail" />
